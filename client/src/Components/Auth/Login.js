@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import axios from "axios";
+
 class Login extends Component {
   constructor() {
     super();
@@ -9,6 +12,55 @@ class Login extends Component {
       errors: {}
     };
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.isAuthenticated) {
+      this.props.history.push("/dashboard"); // push user to dashboard when they login
+    }
+    // if (nextProps.errors) {
+    //   this.setState({
+    //     errors: nextProps.errors
+    //   });
+    // }
+  }
+
+  setAuthToken = token => {
+    if (token) {
+      // Apply authorization token to every request if logged in
+      axios.defaults.headers.common["Authorization"] = token;
+    } else {
+      // Delete auth header
+      delete axios.defaults.headers.common["Authorization"];
+    }
+  };
+
+  loginUser = userData => {
+    axios
+      .post("/api/users/login", userData)
+      .then(res => {
+        // Save to localStorage
+        // Set token to localStorage
+        const { token } = res.data;
+        localStorage.setItem("jwtToken", token);
+        // Set token to Auth header
+        this.setAuthToken(token);
+        // Decode token to get user data
+        const decoded = jwt_decode(token);
+        // Set current user
+        // dispatch(setCurrentUser(decoded));
+        // SET_CURRENT_USER:
+        //       return {
+        //         ...state,
+        //         isAuthenticated: !isEmpty(action.payload),
+        //         user: action.payload
+        //       };
+      })
+      .catch(
+        err => console.log(err)
+        //set error state
+      );
+  };
+
   onChange = e => {
     this.setState({ [e.target.id]: e.target.value });
   };
@@ -18,7 +70,7 @@ class Login extends Component {
       email: this.state.email,
       password: this.state.password
     };
-    console.log(userData);
+    this.loginUser(userData);
   };
   render() {
     const { errors } = this.state;

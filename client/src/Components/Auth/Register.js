@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import axios from "axios";
+
 class Register extends Component {
   constructor() {
     super();
@@ -11,9 +13,21 @@ class Register extends Component {
       errors: {}
     };
   }
+
+  registerUser = (userData, history) => {
+    axios
+      .post("/api/users/register", userData)
+      .then(res => history.push("/login")) // re-direct to login on successful register
+      .catch(err => {
+        console.log(err);
+        //set error state
+      });
+  };
+
   onChange = e => {
     this.setState({ [e.target.id]: e.target.value });
   };
+
   onSubmit = e => {
     e.preventDefault();
     const newUser = {
@@ -22,8 +36,9 @@ class Register extends Component {
       password: this.state.password,
       password2: this.state.password2
     };
-    console.log(newUser);
+    this.registerUser(newUser, this.props.history);
   };
+
   render() {
     const { errors } = this.state;
     return (
@@ -42,7 +57,7 @@ class Register extends Component {
                 Already have an account? <Link to="/login">Log in</Link>
               </p>
             </div>
-            <form noValidate onSubmit={this.onSubmit}>
+            <form noValidate onSubmit={this.onSubmit} className="register-form">
               <div className="input-field col s12">
                 <input
                   onChange={this.onChange}
@@ -104,4 +119,4 @@ class Register extends Component {
     );
   }
 }
-export default Register;
+export default withRouter(Register);

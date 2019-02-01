@@ -13,16 +13,16 @@ class Login extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.auth.isAuthenticated) {
-      this.props.history.push("/dashboard"); // push user to dashboard when they login
-    }
-    // if (nextProps.errors) {
-    //   this.setState({
-    //     errors: nextProps.errors
-    //   });
-    // }
-  }
+  //   componentDidMount() {
+  //   if (globalState.auth.isAuthenticated) {
+  //     this.props.history.push("/dashboard"); // push user to dashboard when they login
+  //   }
+  //   if (globalState.errors) {
+  //     this.setState({
+  //       errors: globalState.errors
+  //     });
+  //   }
+  // }
 
   setAuthToken = token => {
     if (token) {
@@ -46,18 +46,15 @@ class Login extends Component {
         this.setAuthToken(token);
         // Decode token to get user data
         const decoded = jwt_decode(token);
-        // Set current user
-        // dispatch(setCurrentUser(decoded));
-        // SET_CURRENT_USER:
-        //       return {
-        //         ...state,
-        //         isAuthenticated: !isEmpty(action.payload),
-        //         user: action.payload
+
+        //set globalState as->
+        //         isAuthenticated: !isEmpty(decoded),
+        //         user: decoded
         //       };
       })
       .catch(
         err => console.log(err)
-        //set error state
+        //set global error state
       );
   };
 
@@ -100,6 +97,10 @@ class Login extends Component {
                   type="email"
                 />
                 <label htmlFor="email">Email</label>
+                <span className="red-text">
+                  {errors.email}
+                  {errors.emailnotfound}
+                </span>
               </div>
               <div className="input-field col s12">
                 <input
@@ -110,6 +111,10 @@ class Login extends Component {
                   type="password"
                 />
                 <label htmlFor="password">Password</label>
+                <span className="red-text">
+                  {errors.password}
+                  {errors.passwordincorrect}
+                </span>
               </div>
               <div className="col s12" style={{ paddingLeft: "11.250px" }}>
                 <button

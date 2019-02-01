@@ -14,13 +14,21 @@ class Register extends Component {
     };
   }
 
+  // componentDidMount() {
+  //   if (globalState.errors) {
+  //     this.setState({
+  //       errors: globalState.errors
+  //     });
+  //   }
+  // }
+
   registerUser = (userData, history) => {
     axios
       .post("/api/users/register", userData)
       .then(res => history.push("/login")) // re-direct to login on successful register
       .catch(err => {
-        console.log(err);
-        //set error state
+        // console.log(err);
+        //set global error state
       });
   };
 
@@ -67,6 +75,7 @@ class Register extends Component {
                   type="text"
                 />
                 <label htmlFor="name">Name</label>
+                <span className="red-text">{errors.name}</span>
               </div>
               <div className="input-field col s12">
                 <input
@@ -77,6 +86,7 @@ class Register extends Component {
                   type="email"
                 />
                 <label htmlFor="email">Email</label>
+                <span className="red-text">{errors.email}</span>
               </div>
               <div className="input-field col s12">
                 <input
@@ -87,6 +97,7 @@ class Register extends Component {
                   type="password"
                 />
                 <label htmlFor="password">Password</label>
+                <span className="red-text">{errors.password}</span>
               </div>
               <div className="input-field col s12">
                 <input
@@ -97,6 +108,7 @@ class Register extends Component {
                   type="password"
                 />
                 <label htmlFor="password2">Confirm Password</label>
+                <span className="red-text">{errors.password2}</span>
               </div>
               <div className="col s12" style={{ paddingLeft: "11.250px" }}>
                 <button

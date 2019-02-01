@@ -13,14 +13,10 @@ class Login extends Component {
     };
   }
 
-  //   componentDidMount() {
+  // componentDidMount() {
+  //   // If logged in and user navigates to Login page, should redirect them to dashboard
   //   if (globalState.auth.isAuthenticated) {
-  //     this.props.history.push("/dashboard"); // push user to dashboard when they login
-  //   }
-  //   if (globalState.errors) {
-  //     this.setState({
-  //       errors: globalState.errors
-  //     });
+  //     this.props.history.push("/dashboard");
   //   }
   // }
 
@@ -52,10 +48,11 @@ class Login extends Component {
         //         user: decoded
         //       };
       })
-      .catch(
-        err => console.log(err)
-        //set global error state
-      );
+      .catch(err => {
+        this.setState({
+          errors: err.response.data
+        });
+      });
   };
 
   onChange = e => {

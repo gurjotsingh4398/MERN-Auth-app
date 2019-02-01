@@ -12,13 +12,16 @@ class Dashboard extends Component {
     }
   };
 
-  logoutUser = () => dispatch => {
+  logoutUser = () => {
     // Remove token from local storage
     localStorage.removeItem("jwtToken");
     // Remove auth header for future requests
     this.setAuthToken(false);
+
     // Set current user to empty object {} which will set isAuthenticated to false
-    dispatch(setCurrentUser({}));
+    //globalState
+    // /isAuthenticated: false,
+    // user: {}
   };
 
   onLogoutClick = e => {

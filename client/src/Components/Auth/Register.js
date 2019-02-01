@@ -15,10 +15,9 @@ class Register extends Component {
   }
 
   // componentDidMount() {
-  //   if (globalState.errors) {
-  //     this.setState({
-  //       errors: globalState.errors
-  //     });
+  //   // If logged in and user navigates to Register page, should redirect them to dashboard
+  //   if (globalState.auth.isAuthenticated) {
+  //     this.props.history.push("/dashboard");
   //   }
   // }
 
@@ -27,8 +26,9 @@ class Register extends Component {
       .post("/api/users/register", userData)
       .then(res => history.push("/login")) // re-direct to login on successful register
       .catch(err => {
-        // console.log(err);
-        //set global error state
+        this.setState({
+          errors: err.response.data
+        });
       });
   };
 

@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 
-class Dashboard extends Component {
+import Store from "../../Store/context";
+
+class BaseDashboard extends Component {
   setAuthToken = token => {
     if (token) {
       // Apply authorization token to every request if logged in
@@ -20,9 +22,7 @@ class Dashboard extends Component {
     this.setAuthToken(false);
 
     // Set current user to empty object {} which will set isAuthenticated to false
-    //globalState
-    // /isAuthenticated: false,
-    // user: {}
+    this.props.value.logout();
   };
 
   onLogoutClick = e => {
@@ -31,7 +31,7 @@ class Dashboard extends Component {
   };
 
   render() {
-    const { user } = this.props.auth;
+    const { user } = this.props.value;
     return (
       <div style={{ height: "75vh" }} className="container valign-wrapper">
         <div className="row">
@@ -61,8 +61,14 @@ class Dashboard extends Component {
     );
   }
 }
-Dashboard.propTypes = {
+
+BaseDashboard.PropTypes = {
   logoutUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
 };
+
+const Dashboard = () => (
+  <Store.Consumer>{value => <BaseDashboard value={value} />}</Store.Consumer>
+);
+
 export default Dashboard;

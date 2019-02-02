@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import axios from "axios";
 
-class Register extends Component {
+import Store from "../../Store/context";
+
+class BaseRegister extends Component {
   constructor() {
     super();
     this.state = {
@@ -14,12 +16,12 @@ class Register extends Component {
     };
   }
 
-  // componentDidMount() {
-  //   // If logged in and user navigates to Register page, should redirect them to dashboard
-  //   if (globalState.auth.isAuthenticated) {
-  //     this.props.history.push("/dashboard");
-  //   }
-  // }
+  componentDidMount() {
+    // If logged in and user navigates to Login page, should redirect them to dashboard
+    if (this.props.value.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+  }
 
   registerUser = (userData, history) => {
     axios
@@ -131,4 +133,11 @@ class Register extends Component {
     );
   }
 }
+
+const Register = props => (
+  <Store.Consumer>
+    {value => <BaseRegister value={value} history={props.history} />}
+  </Store.Consumer>
+);
+
 export default withRouter(Register);

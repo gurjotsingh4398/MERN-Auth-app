@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 
-class Login extends Component {
+import Store from "../../Store/context";
+
+class BaseLogin extends Component {
   constructor() {
     super();
     this.state = {
@@ -13,12 +15,12 @@ class Login extends Component {
     };
   }
 
-  // componentDidMount() {
-  //   // If logged in and user navigates to Login page, should redirect them to dashboard
-  //   if (globalState.auth.isAuthenticated) {
-  //     this.props.history.push("/dashboard");
-  //   }
-  // }
+  componentDidMount() {
+    // If logged in and user navigates to Login page, should redirect them to dashboard
+    if (this.props.value.isAuthenticated) {
+      this.props.history.push("/dashboard");
+    }
+  }
 
   setAuthToken = token => {
     if (token) {
@@ -43,10 +45,7 @@ class Login extends Component {
         // Decode token to get user data
         const decoded = jwt_decode(token);
 
-        //set globalState as->
-        //         isAuthenticated: !isEmpty(decoded),
-        //         user: decoded
-        //       };
+        this.props.value.setIsAuthenticated(decoded);
       })
       .catch(err => {
         this.setState({
@@ -58,6 +57,7 @@ class Login extends Component {
   onChange = e => {
     this.setState({ [e.target.id]: e.target.value });
   };
+
   onSubmit = e => {
     e.preventDefault();
     const userData = {
@@ -66,6 +66,7 @@ class Login extends Component {
     };
     this.loginUser(userData);
   };
+
   render() {
     const { errors } = this.state;
     return (
@@ -134,4 +135,11 @@ class Login extends Component {
     );
   }
 }
-export default Login;
+
+const Login = props => (
+  <Store.Consumer>
+    {value => <BaseLogin value={value} history={props.history} />}
+  </Store.Consumer>
+);
+
+export default withRouter(Login);

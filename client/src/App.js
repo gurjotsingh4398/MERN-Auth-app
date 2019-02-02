@@ -10,6 +10,8 @@ import Login from "./Components/Auth/Login";
 import PrivateRoute from "./Components/private-route/PrivateRoute";
 import Dashboard from "./Components/Dashboard/Dashboard";
 
+import CentralStore from "./Store/Store";
+
 const setAuthToken = token => {
   if (token) {
     // Apply authorization token to every request if logged in
@@ -61,13 +63,15 @@ class App extends Component {
     return (
       <div>
         <Router>
-          <Navbar />
-          <Route exact path="/" component={Landing} />
-          <Route exact path="/register" component={Register} />
-          <Route exact path="/login" component={Login} />
-          <Switch>
-            <PrivateRoute exact path="/dashboard" component={Dashboard} />
-          </Switch>
+          <CentralStore>
+            <Navbar />
+            <Route exact path="/" component={Landing} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
+            <Switch>
+              <PrivateRoute exact path="/dashboard" component={Dashboard} />
+            </Switch>
+          </CentralStore>
         </Router>
       </div>
     );

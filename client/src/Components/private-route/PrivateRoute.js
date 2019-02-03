@@ -30,7 +30,7 @@ BasePrivateRoute.propTypes = {
 const PrivateRoute = props => {
   return (
     <Store.Consumer>
-      value => return <BasePrivateRoute value={value} {...props} />;
+      {value => <BasePrivateRoute value={value} {...props} />};
     </Store.Consumer>
   );
 };

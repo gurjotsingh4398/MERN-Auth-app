@@ -18,6 +18,7 @@ class BaseLogin extends Component {
   componentDidMount() {
     // If logged in and user navigates to Login page, should redirect them to dashboard
     if (this.props.value.isAuthenticated) {
+      // window.console.log(this.props.history);
       this.props.history.push("/dashboard");
     }
   }
@@ -44,7 +45,7 @@ class BaseLogin extends Component {
         this.setAuthToken(token);
         // Decode token to get user data
         const decoded = jwt_decode(token);
-
+        window.console.log("aa", this.props.value);
         this.props.value.setIsAuthenticated(decoded);
       })
       .catch(err => {

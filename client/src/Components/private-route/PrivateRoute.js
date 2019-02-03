@@ -2,14 +2,13 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import PropTypes from "prop-types";
 
-import Store from "../../Store/Store";
+import Store from "../../Store/context";
 
 const BasePrivateRoute = ({
   component: Component,
   isAuthenticated,
   ...rest
 }) => {
-  window.console.log(isAuthenticated);
   return (
     <Route
       {...rest}
@@ -25,13 +24,15 @@ const BasePrivateRoute = ({
 };
 
 BasePrivateRoute.propTypes = {
-  auth: PropTypes.object.isRequired
+  isAuthenticated: PropTypes.object
 };
 
-const PrivateRoute = props => (
-  <Store.Consumer>
-    {value => <BasePrivateRoute value={value} {...props} />}
-  </Store.Consumer>
-);
+const PrivateRoute = props => {
+  return (
+    <Store.Consumer>
+      value => return <BasePrivateRoute value={value} {...props} />;
+    </Store.Consumer>
+  );
+};
 
 export default PrivateRoute;
